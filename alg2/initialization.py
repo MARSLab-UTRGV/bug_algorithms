@@ -218,7 +218,7 @@ def update_robot_state():
     # updating the current theta
     robot_position[2] = math.atan2(compass_val[0], compass_val[1])
     
-    # updating the currnet robot position
+    # updating the current robot position
     robot_position[0] = gps_values[0]
     robot_position[1] = gps_values[1]
     # print("Robot Position Compass: ", robot_position[2])

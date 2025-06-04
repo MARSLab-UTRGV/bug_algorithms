@@ -244,3 +244,77 @@ def get_north_bearing_in_degrees(north):
   # print("bearing: ", bearing)
   
   return bearing
+
+def calculate_target_angle(robot_pos, goal_pos):
+    #the goal will be calculated based on 0 degrees started at north going clockwise
+    #the robot will be calculated based on 0 degrees started at east going counter clockwise
+    # this function calculates the goal angle and then normalizes it on a 0-360 degrees
+    # then it will negate the angle so it will be based on the counter clockwise
+    # then add 90 to start 0 degrees from east, and add 360 to get an angle betweeen 0-360
+    dx = goal_pos[0] - robot_pos[0]
+    dy = goal_pos[1] - robot_pos[1]
+    angle_to_target = math.degrees(math.atan2(dx, dy))
+    if angle_to_target < 0:
+        angle_to_target += 360
+    elif angle_to_target > 360:
+        angle_to_target -= 360
+    angle_to_target *= -1
+    angle_to_target += 450
+    if angle_to_target < 0:
+        angle_to_target += 360
+    elif angle_to_target > 360:
+        angle_to_target -= 360
+    return angle_to_target
+
+# boolean function: rotates robot if not pointed to M/the goal point
+def align_to_M(target_angle, yaw_angle, threshold = 0.5):
+    ts = 1  # turning speed
+    turn = 'left'
+
+    difference = target_angle - yaw_angle
+
+    halfway = target_angle - 180
+    #print("Halfway not normalized: ", halfway)
+    if halfway < 0:
+        halfway += 360
+    
+    #print("Target Angle: ", target_angle)
+    #print("Yaw Angle: ", yaw_angle)
+    #print("Halfway: ", halfway)
+    #print("Difference: ", difference)
+
+    if target_angle <= 180 and yaw_angle <= 180:
+    #    print("Both angles less than 180")
+        if target_angle < yaw_angle:
+            turn = 'right'
+    #        print("Target angle is less than yaw. Turn right")
+        else: 
+            turn = 'left'
+    #        print("Target angle is more than yaw. Turn left")
+    elif (target_angle <= 360 and yaw_angle <= 360) and (target_angle >=180 and yaw_angle >= 180):
+    #    print("Both angles greater than 180 and less than 360")
+        if target_angle < yaw_angle:
+            turn = 'right'
+    #        print("Target angle is less than yaw. Turn right")
+        else: 
+            turn = 'left'
+    #        print("Target angle is more than yaw. Turn left")
+    else:
+        if yaw_angle > halfway:
+            turn = 'left'
+    #        print("Yaw is greater than halfway. Turn left")
+        else: 
+            turn = 'right'
+    #        print("Yaw is less than halfway. Turn right")
+
+    if abs(difference) < threshold:
+        print("Aligned")
+        return True
+    else:
+        if turn == 'left':
+    #        print("Turning left")
+            update_motor_speed(input_omega=[-ts, ts/20])
+        else: 
+    #        print("Turning right")
+            update_motor_speed(input_omega=[ts/20, -ts])
+        return False
