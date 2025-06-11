@@ -4,9 +4,24 @@ No photo display will be projected here.
 All updates must be dated and recorded with time stamps and data inclusion.
 Projected timeline of current work and future timeline of new work is suggested. 
 
-As of 6/4/2025 12:18
+Wednesday 6/4/2025 12:18 PM
 Updates to the GitHub to include new algorithms and the worlds used for the completed analysis.
 Updates to the OneDrive to include new video and material being used.
 The papers collected for references need to be searched for complex obstacles so they can be replicated.
 Completion of the maze is projected for tomorrow.
 A new section for the overleaf will be drafted and added today.
+
+Thursday 6/5/2025 10:00 AM
+Running new algorithm on a few existing maps and recording the times
+
+Friday 6/6/2025 5:26 PM
+Running new algorithm on the rest of the existing maps and recording the times
+continue building the maze.
+
+Monday 6/9/2025 3:58 PM
+Cleaning data file for sharing with Nadia.
+
+Tuesday 6/10/2025 11:43 AM
+Completion of the maze.
+
+
