@@ -15,7 +15,7 @@ Thursday 6/5/2025 10:00 AM
 Running new algorithm on a few existing maps and recording the times
 
 Friday 6/6/2025 5:26 PM
-Running new algorithm on the rest of the existing maps and recording the times
+Running new algorithm on the rest of the existing maps and recording the times => encounter of wrong turn on trap maze. need to reevaluate
 continue building the maze.
 
 Monday 6/9/2025 3:58 PM
@@ -23,5 +23,7 @@ Cleaning data file for sharing with Nadia.
 
 Tuesday 6/10/2025 11:43 AM
 Work on building the maze.
+Working maze thanks to the help of Andris.
+Maze map now available; needed to add shape w/ transform w/ cadshape to the .obj file created through CAD.
 
 
