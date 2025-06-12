@@ -26,4 +26,7 @@ Work on building the maze.
 Working maze thanks to the help of Andris.
 Maze map now available; needed to add shape w/ transform w/ cadshape to the .obj file created through CAD.
 
+Wednesday 8:32 AM
+Maze map failing physics. Current Readjustment.....
+
 
