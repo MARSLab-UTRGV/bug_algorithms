@@ -24,7 +24,7 @@ Solid {
         baseColor 0.5 1 0.5
         baseColorMap ImageTexture {
           url [
-            "../MazeTextures/maze_texture.jpg"
+            "../../MazeTextures/maze_texture.jpg"
           ]
         }
         roughness 1
@@ -32,7 +32,7 @@ Solid {
       }
       geometry Mesh {
         url [
-          "../CadFiles/Maze (Thick Walls) v2.obj"
+          "../../CadFiles/Maze (Thick Walls) v2.obj"
         ]
       }
     }

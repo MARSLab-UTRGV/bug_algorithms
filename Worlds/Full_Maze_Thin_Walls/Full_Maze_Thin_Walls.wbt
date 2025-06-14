@@ -7,8 +7,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5934132256432886 0.5623447027262227 0.5758725370664795 2.142491199824189
-  position -0.034586273013087455 0.22843063088755802 4.877295009392728
+  orientation -0.5761292327061031 0.5739728052001679 0.5819195185866574 2.090817000416568
+  position 0.0023735825530018483 -0.0174477544535529 4.862006348886671
 }
 TexturedBackground {
 }
@@ -24,14 +24,14 @@ Solid {
         baseColor 0.3 1 0.4
         baseColorMap ImageTexture {
           url [
-            "../MazeTextures/maze_texture.jpg"
+            "../../MazeTextures/maze_texture.jpg"
           ]
         }
         metalness 0
       }
       geometry Mesh {
         url [
-          "../CadFiles/Maze (Thin Walls) v1.obj"
+          "../../CadFiles/Maze (Thin Walls) v1.obj"
         ]
       }
     }
