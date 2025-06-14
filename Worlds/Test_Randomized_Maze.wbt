@@ -1,0 +1,26 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5715671262201611 0.577311600540499 0.5831143422226842 2.0770509134130797
+  position -0.07123848584831755 -0.1240353407071707 5.303859855740113
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2.5 2.5
+}
+Robot {
+  controller "random_maze"
+  controllerArgs [
+    ""
+  ]
+  supervisor TRUE
+}
