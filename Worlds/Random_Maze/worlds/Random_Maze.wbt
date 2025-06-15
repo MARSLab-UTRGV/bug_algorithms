@@ -8,7 +8,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0944
-  position -1.484750066318617e-05 -1.484754264642456e-05 4.7491370990022
+  position -1.343269719154261e-05 -1.343273517424025e-05 5.249486567238014
 }
 TexturedBackground {
 }
@@ -19,7 +19,7 @@ RectangleArena {
 }
 Robot {
   name "maze_spawner"
-  controller "object_spawner_controller"
+  controller "random_maze_controller"
   supervisor TRUE
-  window "object_spawner_window"
+  window "random_maze_window"
 }
