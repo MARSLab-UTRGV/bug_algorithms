@@ -7,8 +7,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5715671262201611 0.577311600540499 0.5831143422226842 2.0770509134130797
-  position -0.07123848584831755 -0.1240353407071707 5.303859855740113
+  orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0944
+  position -1.484750066318617e-05 -1.484754264642456e-05 4.7491370990022
 }
 TexturedBackground {
 }
@@ -18,9 +18,8 @@ RectangleArena {
   floorSize 2.5 2.5
 }
 Robot {
-  controller "random_maze"
-  controllerArgs [
-    ""
-  ]
+  name "maze_spawner"
+  controller "object_spawner_controller"
   supervisor TRUE
+  window "object_spawner_window"
 }
