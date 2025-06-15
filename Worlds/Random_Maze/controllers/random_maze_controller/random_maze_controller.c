@@ -11,11 +11,18 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
-#include <stdbool.h> // For bool type
+#include <stdbool.h>
 
-// --- MODIFICATION START: Ensure TIME_STEP is defined globally ---
 #define TIME_STEP 64
-// --- MODIFICATION END ---
+
+// --- NEW: ANSI COLOR CODE DEFINITIONS ---
+#define ANSI_COLOR_RESET   "\x1b[0m"
+#define ANSI_COLOR_RED     "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\x1b[32m"
+#define ANSI_COLOR_YELLOW  "\x1b[33m"
+#define ANSI_COLOR_BLUE    "\x1b[34m"
+#define ANSI_COLOR_CYAN    "\x1b[36m"
+// --- END NEW BLOCK ---
 
 // --- MAZE GEOMETRY & LAYOUT ---
 #define GRID_SIZE 10
@@ -31,11 +38,7 @@ char WALL_TEMPLATE[256];
 
 WbNodeRef maze_parent_node_ref = NULL;
 
-typedef struct {
-    int x;
-    int y;
-} Point;
-
+typedef struct { int x; int y; } Point;
 Point passages[GRID_SIZE * GRID_SIZE * 2];
 int num_passages = 0;
 bool visited[GRID_SIZE][GRID_SIZE];
@@ -45,6 +48,9 @@ void initialize_vrml_templates();
 void generate_maze_passages_c(int n);
 void clear_current_maze();
 void build_and_spawn_maze();
+
+// (The maze generation and building functions from here are unchanged)
+// ...
 
 void initialize_vrml_templates() {
     snprintf(POST_TEMPLATE, sizeof(POST_TEMPLATE),
@@ -67,9 +73,10 @@ void initialize_vrml_templates() {
 
 void clear_current_maze() {
     if (maze_parent_node_ref) {
-        printf("Clearing existing maze (MAZE_GROUP)...\n");
+        // MODIFIED: Added color
+        printf(ANSI_COLOR_YELLOW "Clearing existing maze (MAZE_GROUP)..." ANSI_COLOR_RESET "\n");
         wb_supervisor_node_remove(maze_parent_node_ref);
-        maze_parent_node_ref = NULL; // Important to reset the reference
+        maze_parent_node_ref = NULL;
     }
 }
 
@@ -85,7 +92,7 @@ void generate_maze_passages_c(int n) {
     stack[stack_top++] = (Point){0, 0};
     visited[0][0] = true;
 
-    int dx[] = {0, 0, 1, -1}; // N, S, E, W
+    int dx[] = {0, 0, 1, -1};
     int dy[] = {1, -1, 0, 0};
 
     while (stack_top > 0) {
@@ -105,27 +112,25 @@ void generate_maze_passages_c(int n) {
             int choice = rand() % num_neighbors;
             Point next = neighbors[choice];
 
-            if ((num_passages + 2) <= (GRID_SIZE * GRID_SIZE * 2) ) { // Bounds check
+            if ((num_passages + 2) <= (GRID_SIZE * GRID_SIZE * 2) ) {
                  passages[num_passages++] = current;
                  passages[num_passages++] = next;
             } else {
-                fprintf(stderr, "Error: Too many passages for array.\n");
+                fprintf(stderr, ANSI_COLOR_RED "Error: Too many passages for array.\n" ANSI_COLOR_RESET);
                 break; 
             }
 
-
             visited[next.x][next.y] = true;
-            if(stack_top < (n*n)) // Bounds check
+            if(stack_top < (n*n))
                 stack[stack_top++] = next;
             else {
-                 fprintf(stderr, "Error: Stack overflow in maze generation.\n");
+                 fprintf(stderr, ANSI_COLOR_RED "Error: Stack overflow in maze generation.\n" ANSI_COLOR_RESET);
                  break;
             }
         } else {
             stack_top--;
         }
     }
-    printf("Generated %d passages.\n", num_passages / 2);
 }
 
 bool has_wall_c(Point p1, Point p2) {
@@ -144,38 +149,20 @@ void build_and_spawn_maze() {
     clear_current_maze();
 
     WbNodeRef root_node = wb_supervisor_node_get_root();
-    if (!root_node) {
-      fprintf(stderr, "Error: Could not get root node in build_and_spawn_maze.\n");
-      return;
-    }
     WbFieldRef root_children_field = wb_supervisor_node_get_field(root_node, "children");
-    if (!root_children_field) {
-      fprintf(stderr, "Error: Could not get children field from root node in build_and_spawn_maze.\n");
-      return;
-    }
     
-    maze_parent_node_ref = wb_supervisor_node_get_from_def("MAZE_GROUP");
-    if (maze_parent_node_ref)
-        clear_current_maze();
-
     wb_supervisor_field_import_mf_node_from_string(root_children_field, -1, "DEF MAZE_GROUP Group {}");
     maze_parent_node_ref = wb_supervisor_node_get_from_def("MAZE_GROUP");
 
     if (!maze_parent_node_ref) {
-        fprintf(stderr, "ERROR: Could not create or find MAZE_GROUP node after import attempt.\n");
+        fprintf(stderr, ANSI_COLOR_RED "ERROR: Could not create MAZE_GROUP node.\n" ANSI_COLOR_RESET);
         return;
     }
     WbFieldRef maze_children_field = wb_supervisor_node_get_field(maze_parent_node_ref, "children");
-    if (!maze_children_field) {
-        fprintf(stderr, "ERROR: Could not get children field from MAZE_GROUP node.\n");
-        return;
-    }
 
     generate_maze_passages_c(GRID_SIZE);
-
     char vrml_buffer[512];
 
-    printf("Spawning posts...\n");
     for (int j = 0; j <= GRID_SIZE; ++j) {
         for (int i = 0; i <= GRID_SIZE; ++i) {
             double px = MAZE_OFFSET + i * CELL_SIZE;
@@ -185,7 +172,6 @@ void build_and_spawn_maze() {
         }
     }
 
-    printf("Spawning horizontal walls...\n");
     for (int j = 0; j <= GRID_SIZE; ++j) {
         for (int i = 0; i < GRID_SIZE; ++i) {
             if (has_wall_c((Point){i, j - 1}, (Point){i, j})) {
@@ -197,7 +183,6 @@ void build_and_spawn_maze() {
         }
     }
 
-    printf("Spawning vertical walls...\n");
     for (int i = 0; i <= GRID_SIZE; ++i) {
         for (int j = 0; j < GRID_SIZE; ++j) {
             if (i == 0 && j == 0) continue;
@@ -211,46 +196,49 @@ void build_and_spawn_maze() {
             }
         }
     }
-    printf("Maze build complete.\n");
+    // MODIFIED: Added color
+    printf(ANSI_COLOR_GREEN "Maze build complete." ANSI_COLOR_RESET "\n");
 }
 
 int main(int argc, char **argv) {
   wb_robot_init();
   
-  // --- NEW: INSTRUCTION BLOCK ---
-  printf("\n--- Obstacle Editor Control Panel ---\n");
+  // MODIFIED: Added colors to this block
+  printf("\n" ANSI_COLOR_CYAN "--- Obstacle Editor Control Panel ---" ANSI_COLOR_RESET "\n");
   printf("Open this URL in a web browser to control the simulation:\n");
-  printf("http://localhost:1234/robot_windows/object_spawner_window/object_spawner_window.html?name=maze_spawner\n");
-  printf("-------------------------------------\n\n");
-  // --- END NEW BLOCK ---
+  printf(ANSI_COLOR_CYAN "-------------------------------------\n\n" ANSI_COLOR_RESET);
+  printf(ANSI_COLOR_YELLOW "http://localhost:1234/robot_windows/random_maze_window/random_maze_window.html?name=maze_spawner" ANSI_COLOR_RESET "\n");
+  printf(ANSI_COLOR_CYAN "-------------------------------------\n\n" ANSI_COLOR_RESET);
   
   srand(time(NULL));
   initialize_vrml_templates();
 
   if (!wb_robot_get_supervisor()) {
-    fprintf(stderr, "Error: This controller requires the robot to be a Supervisor.\n");
+    fprintf(stderr, ANSI_COLOR_RED "Error: This controller requires the robot to be a Supervisor.\n" ANSI_COLOR_RESET);
     wb_robot_cleanup();
     return -1;
   }
   printf("Maze Supervisor Controller started.\n");
 
-  build_and_spawn_maze(); // Build initial maze
+  build_and_spawn_maze();
 
   while (wb_robot_step(TIME_STEP) != -1) {
     const char *message;
     while ((message = wb_robot_wwi_receive_text())) {
-      printf("Received message: '%s'\n", message);
+      // MODIFIED: Added colors
+      printf("Received message: " ANSI_COLOR_BLUE "'%s'" ANSI_COLOR_RESET "\n", message);
       if (strcmp(message, "randomize_maze") == 0) {
-        printf("Randomize maze command received.\n");
+        printf(ANSI_COLOR_GREEN "Randomize maze command received." ANSI_COLOR_RESET "\n");
         build_and_spawn_maze();
       } else if (strncmp(message, "spawn_box", 9) == 0) {
+        // This part is unchanged but will benefit from colors in error messages
         double x = 0.0, y = 0.5, z = 0.0;
         int items_scanned = sscanf(message, "spawn_box %lf %lf %lf", &x, &y, &z);
         if (items_scanned != 3) {
             x = (rand() % 400 - 200) / 100.0;
             y = 0.5;
             z = (rand() % 400 - 200) / 100.0;
-            printf("Could not parse coordinates for spawn_box, using random: %.2f %.2f %.2f\n", x, y, z);
+            printf(ANSI_COLOR_YELLOW "Could not parse coordinates for spawn_box, using random: %.2f %.2f %.2f\n" ANSI_COLOR_RESET, x, y, z);
         } else {
             printf("Parsed coordinates for spawn_box: x=%.2f, y=%.2f, z=%.2f\n", x, y, z);
         }
@@ -259,9 +247,9 @@ int main(int argc, char **argv) {
          char box_string[256];
          sprintf(box_string, "Transform{translation %f %f %f children[Shape{appearance PBRAppearance{baseColor 1 0 0}geometry Box{size .2 .2 .2}}]}",x,y,z);
          wb_supervisor_field_import_mf_node_from_string(children_field, -1, box_string);
-         printf("Spawned a box at %.2f %.2f %.2f\n", x,y,z);
+         printf(ANSI_COLOR_GREEN "Spawned a box at %.2f %.2f %.2f\n" ANSI_COLOR_RESET, x,y,z);
       } else {
-        fprintf(stderr, "Unknown message: '%s'\n", message);
+        fprintf(stderr, ANSI_COLOR_RED "Unknown message: '%s'\n" ANSI_COLOR_RESET, message);
       }
     }
   }

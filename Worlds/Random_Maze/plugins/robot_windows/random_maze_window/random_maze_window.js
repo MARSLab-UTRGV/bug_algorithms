@@ -23,7 +23,7 @@ function receive(message, robot) {
 window.onload = function() {
   log('HTML page loaded. Initializing RobotWindow...');
   window.robotWindow = new RobotWindow();
-  window.robotWindow.setTitle('Interactive Spawner Window');
+  window.robotWindow.setTitle('Obstacle UI');
   window.robotWindow.receive = receive;
   log('RobotWindow initialized.');
 };

@@ -1,4 +1,4 @@
-build/release/object_spawner_controller.o: object_spawner_controller.c \
+build/release/random_maze_controller.o: random_maze_controller.c \
  C:\Program\ Files\Webots/include/controller/c/webots/robot.h \
  C:\Program\ Files\Webots/include/controller/c/webots/types.h \
  C:\Program\ Files\Webots/include/controller/c/webots/nodes.h \
