@@ -8,14 +8,14 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0944
-  position -1.343269719154261e-05 -1.343273517424025e-05 5.249486567238014
+  position -6.543778301216838e-06 -6.543796804600712e-06 7.685773283081279
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 2.5 2.5
+  floorSize 5 5
 }
 Robot {
   name "maze_spawner"
