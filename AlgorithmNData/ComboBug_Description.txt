@@ -1,0 +1,14 @@
+ComboBug Algorithm
+
+Summary: Is a combination of the styles from Bug0 (Common-Sense) and Bug2 (M-Line). 
+
+1. The robot will initialize and record the m-line. Continues to step 2.
+2. The robot moves towards the target.
+3. If the robot encounters an obstacle it record the coordinates where it hit the obstacle and 
+   will start step 4 (Wall Following). Else it will keep moving towards the target.
+4. The robot will check if the pathway to the target:
+      a. If free and closer than hit point: the robot will move towards the target
+	 and continue to step 2.
+      b. If free and on m-line: the robot will move towards the target on the m-line
+         and continue to step 2.
+      c. Else: repeat step 4 until the robot reached the target.
