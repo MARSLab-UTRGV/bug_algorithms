@@ -68,7 +68,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.02600000000000084 0.02
+        translation 0 0.026000000000000852 0.02
         rotation 0 1 0 1.7526063104641838
         children [
           DEF EPUCK_WHEEL Pose {
@@ -221,7 +221,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.02600000000000083 0.02
+        translation 0 -0.026000000000000845 0.02
         rotation 0 1 0 0.6390347173460105
         children [
           Pose {
@@ -1795,7 +1795,7 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "combobug"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""

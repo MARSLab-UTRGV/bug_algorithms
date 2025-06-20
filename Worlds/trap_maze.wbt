@@ -76,7 +76,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.02600000000000009 0.02
+        translation 0 0.026000000000000075 0.02
         rotation 0 1 0 1.7574062090220148
         children [
           DEF EPUCK_WHEEL Pose {
@@ -229,7 +229,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.026000000000000485 0.02
+        translation 0 -0.0260000000000005 0.02
         rotation 0 1 0 0.5430438413125321
         children [
           Pose {

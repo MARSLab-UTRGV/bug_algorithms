@@ -1780,7 +1780,7 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "alg2"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""

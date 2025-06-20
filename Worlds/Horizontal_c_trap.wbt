@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 0.0002548476910068359 1.2249225523519257e-05 6.48306431385773
+  orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0943245915045035
+  position 0.0007188457468440795 0.00047622795826880043 7.363276478150347
 }
 TexturedBackground {
 }
@@ -19,47 +19,22 @@ RectangleArena {
   floorSize 2.5 2.5
 }
 Wall {
-  translation -0.605 -0.679518 0
-  rotation 0 0 1 -0.000795307179585869
-  size 0.4 0.075 0.1
+  rotation 0 0 1 1.57
+  size 0.75 0.075 0.1
 }
 Wall {
-  translation -0.454 -0.055 0
-  rotation 0 0 1 1.5708
+  translation 0.34 0.375 0
   name "wall(1)"
-  size 1.3 0.1 0.1
+  size 0.75 0.1 0.1
 }
 Wall {
-  translation -0.105 0.565 0
+  translation 0.34 -0.375 0
   name "wall(2)"
-  size 0.8 0.1 0.1
-}
-Wall {
-  translation 0.42 0.035 0
-  name "wall(3)"
-  size 0.4 0.1 0.1
-}
-Wall {
-  translation 0.245 0.282726 0
-  rotation 0 0 1 1.5708
-  name "wall(4)"
-  size 0.6 0.1 0.1
-}
-Wall {
-  translation 0.65 0.19 0
-  rotation 0 0 1 1.5708
-  name "wall(5)"
-  size 0.4 0.1 0.1
-}
-Wall {
-  translation -0.754 -0.48 0
-  rotation 0 0 1 1.5708
-  name "wall(6)"
-  size 0.4 0.1 0.1
+  size 0.75 0.1 0.1
 }
 DEF bug Robot {
-  translation -0.369522 1.03875 0.00179779
-  rotation 0.0038253782797429475 0.0025031488743441324 -0.9999895503087667 0.930057
+  translation 1.03294 -0.0193548 -0.0031688
+  rotation 0.002056429477749581 0.002299896750631243 -0.9999952407750446 1.4536522628615571
   children [
     InertialUnit {
       name "inertial_unit"
@@ -82,7 +57,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.025999999999999798 0.02
+        translation 0 0.0259999999999997 0.02
         rotation 0 1 0 1.7574062090220148
         children [
           DEF EPUCK_WHEEL Pose {
@@ -235,7 +210,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.026000000000000776 0.02
+        translation 0 -0.026000000000000873 0.02
         rotation 0 1 0 0.5430438413125321
         children [
           Pose {
@@ -1809,13 +1784,13 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "combobug"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
 }
 DEF goal Solid {
-  translation 0.01 -0.19 0
+  translation -0.65 -0.04 0
   children [
     DEF post Shape {
       appearance PBRAppearance {
