@@ -1,32 +1,49 @@
-#VRML_SIM R2023b utf8
+#VRML_SIM R2025a utf8
 
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackground.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/floors/protos/RectangleArena.proto"
-EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 0.0002526887364091827 1.0090264821140362e-05 8.203050667048611
+  orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0944
+  position -2.229220264465258e-06 -2.229226567875365e-06 9.211629603502493
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 2.5 2.5
+  floorSize 5 5
 }
-DEF Block Wall {
-  translation -0.27 -0.1 0
-  name "wall(1)"
-  size 0.4 0.2 0.15
+DEF MAZE_SUPERVISOR Robot {
+  children [
+    Emitter {
+      name "supervisor_emitter"
+    }
+  ]
+  name "MAZE_SUPERVISOR"
+  controller "Multiple_Maps_Spawner_Controller"
+  supervisor TRUE
+  window "Multiple_Map_UI_Spawner"
 }
 DEF bug Robot {
-  translation -0.299127 0.226251 -0.000180319
+  translation -0.0194878 0.827241 -2.09038e-05
   rotation -7.832529921024735e-05 -0.00011845299880564043 0.9999999899170172 -2.2036653071795866
   children [
+    Receiver {
+      name "robot_receiver"
+    }
+    Pen {
+      name "trail_pen"
+      recognitionColors [
+        1 0 0
+      ]
+      inkColor 1 1 0
+      inkDensity 0
+      leadSize 3
+    }
     InertialUnit {
       name "inertial_unit"
     }
@@ -48,7 +65,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.026000000000000533 0.02
+        translation 0 0.026000000000000818 0.02
         rotation 0 1 0 1.7526063104641838
         children [
           DEF EPUCK_WHEEL Pose {
@@ -201,7 +218,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.026000000000000526 0.02
+        translation 0 -0.026000000000000942 0.02
         rotation 0 1 0 0.6390347173460105
         children [
           Pose {
@@ -1775,13 +1792,13 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "altcombo"
+  controller "alg2"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
 }
 DEF goal Solid {
-  translation -0.24 -0.77 0
+  translation -0.35 0.01 0
   children [
     DEF post Shape {
       appearance PBRAppearance {

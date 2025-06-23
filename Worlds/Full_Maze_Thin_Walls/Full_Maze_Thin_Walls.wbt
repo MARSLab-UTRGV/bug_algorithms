@@ -1,0 +1,41 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.5761292327061031 0.5739728052001679 0.5819195185866574 2.090817000416568
+  position 0.0023735825530018483 -0.0174477544535529 4.862006348886671
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2.5 2.5
+}
+Solid {
+  children [
+    DEF Maze_(Thin_Walls) Shape {
+      appearance PBRAppearance {
+        baseColor 0.3 1 0.4
+        baseColorMap ImageTexture {
+          url [
+            "../../MazeTextures/maze_texture.jpg"
+          ]
+        }
+        metalness 0
+      }
+      geometry Mesh {
+        url [
+          "../../CadFiles/Maze (Thin Walls) v1.obj"
+        ]
+      }
+    }
+  ]
+  name "Maze"
+  boundingObject USE Maze_(Thin_Walls)
+}

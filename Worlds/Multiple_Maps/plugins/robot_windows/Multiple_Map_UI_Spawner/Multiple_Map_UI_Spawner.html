@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Map Spawner</title>
+    <link rel="icon" type="image/png" href="https://cyberbotics.com/assets/images/webots.png">
+
+    <style>
+        body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;background-color:#d7ccc8;color:#4e342e}.container{background-color:#efebe9;padding:25px 40px;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.15);text-align:center;width:90%;max-width:550px}h1{color:#5d4037;margin-top:0;margin-bottom:10px}p{font-size:.9em;color:#795548;margin-bottom:25px}.button-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;margin-bottom:25px}button{background-color:#8d6e63;color:#fff;border:none;padding:12px;border-radius:8px;cursor:pointer;font-size:.9em;font-weight:700;transition:all .2s ease-in-out;box-shadow:0 4px 10px rgba(0,0,0,.1)}button:hover{background-color:#a1887f;transform:translateY(-3px);box-shadow:0 6px 15px rgba(0,0,0,.2)}button:active{background-color:#795548;transform:translateY(-1px);box-shadow:0 2px 5px rgba(0,0,0,.2)}
+    </style>
+
+    <script type="module">
+        import RobotWindow from 'https://cyberbotics.com/wwi/R2025a/RobotWindow.js';
+        window.robotWindow = new RobotWindow();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Map Spawner</h1>
+        <p>Select a map to load into the simulation.</p>
+        <div class="button-grid">
+            <button data-filename="Easy Maze Map 1 (Fig. 9 From Paper) v1.obj">Easy Map 1</button>
+            <button data-filename="Easy Maze Map 2 (Fig. 3 From Paper) v2.obj">Easy Map 2</button>
+            <button data-filename="Easy Maze Map 3 (Fig. 12 From Paper) v1.obj">Easy Map 3</button>
+            <button data-filename="Medium Maze Map (Fig. 4 From Paper) v2.obj">Medium Map 1</button>
+            <button data-filename="Medium Maze Map 2 (Fig. 10 From Paper) v3.obj">Medium Map 2</button>
+            <!-- THIS IS THE LINE THAT IS FIXED - The period after 15 is removed -->
+            <button data-filename="Medium Maze Map 3 (Fig. 15 From Paper) v2.obj">Medium Map 3</button>
+            <button data-filename="Hard Maze Map 1 (Fig. 1 From Paper) v2.obj">Hard Map 1</button>
+            <button data-filename="Hard Maze Map 2 (Fig B.17 From Paper) v1.obj">Hard Map 2</button>
+            <button data-filename="Hard Maze Map 3 (Fig. 7 From Paper) v2.obj">Hard Map 3</button>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        window.onload = () => {
+            document.querySelectorAll('button[data-filename]').forEach(button => {
+                button.onclick = function() {
+                    const filename = this.dataset.filename;
+                    console.log(`UI: Button clicked. Sending message to controller: '${filename}'`);
+                    window.robotWindow.send(filename);
+                };
+            });
+            console.log('UI: Map Spawner UI initialized and ready.');
+        };
+    </script>
+</body>
+</html>

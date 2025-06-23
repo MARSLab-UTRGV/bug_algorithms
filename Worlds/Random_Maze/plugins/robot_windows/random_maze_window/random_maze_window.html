@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Obstacle Editor</title>
+  
+  <!-- --- EMBEDDED CSS: CAFE MOCHA THEME --- -->
+  <style>
+    /* Basic Setup & Fonts */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background-color: #D7CCC8; /* Light, warm gray background */
+      color: #4E342E; /* Dark brown text */
+    }
+
+    /* Main Content Card */
+    .container {
+      background-color: #EFEBE9; /* Creamy off-white card */
+      padding: 25px 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    /* Headings and Text */
+    h1 {
+      color: #5D4037; /* Slightly lighter brown for heading */
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 0.9em;
+      color: #795548;
+      margin-bottom: 25px;
+    }
+
+    /* Button Styling & Animation */
+    .button-container {
+      margin-bottom: 25px;
+    }
+
+    button {
+      background-color: #8D6E63; /* Coffee brown */
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1em;
+      font-weight: bold;
+      transition: all 0.2s ease-in-out; /* Smooth transition for all properties */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #A1887F; /* Lighter brown on hover */
+      transform: translateY(-3px); /* "Lift" effect */
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    button:active {
+      background-color: #795548; /* Darker brown on click */
+      transform: translateY(-1px); /* "Press down" effect */
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Console Styling */
+    .console-container h2 {
+      font-size: 1.1em;
+      color: #5D4037;
+      text-align: left;
+      border-bottom: 2px solid #D7CCC8;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    #console {
+      list-style-type: none;
+      padding: 10px;
+      margin: 0;
+      height: 120px;
+      overflow-y: auto;
+      background-color: #F5F5F5; /* Very light background for console */
+      border: 1px solid #D7CCC8;
+      border-radius: 6px;
+      font-family: 'Consolas', 'Menlo', 'Courier New', monospace;
+      font-size: 0.85em;
+      text-align: left;
+      color: #333;
+    }
+
+    #console li {
+      padding: 4px 2px;
+      white-space: pre-wrap; /* Wrap long messages */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Obstacle Editor</h1>
+    <p>Press the button below to randomize the maze. More obstacles coming soon...</p>
+    <div class="button-container">
+      <button onclick="randomizeMaze()">Randomize Maze</button>
+    </div>
+    <div class="console-container">
+      <h2>Console</h2>
+      <ul id="console"></ul>
+    </div>
+  </div>
+  
+  <script src="random_maze_window.js" type="module"></script>
+</body>
+</html>
