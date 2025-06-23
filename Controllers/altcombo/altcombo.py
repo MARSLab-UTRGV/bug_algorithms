@@ -38,8 +38,8 @@ def is_open(yaw, atg, right, left, front, left_back, right_back):
     print("Front Wall: ", front)
     print("yaw = ", yaw)
     print("atg = ", atg)
-    normalized_right = yaw - 90
-    normalized_left = yaw + 90
+    normalized_right = yaw - 80
+    normalized_left = yaw + 80
     normalized_frontone = yaw - 15
     normalized_fronttwo = yaw + 15
     if normalized_left > 360:
@@ -71,36 +71,28 @@ def is_open(yaw, atg, right, left, front, left_back, right_back):
     #print("Both left: ", (left_angle[0] > left_angle[1]) and (atg >= (left_angle[0]) and atg <= left_angle[1]+360))
 
     if front == False:
-        #print("in front")
+        print("in front")
         if (atg >= front_angle[0] and atg <= front_angle[1]):
-            #print("Normal angle open in Front")
+            print("Normal angle open in Front")
             return True      
         if (front_angle[0] > front_angle[1]) and (atg >= (front_angle[0]-360) and atg <= front_angle[1]):
-            #print("Angle in overlap open in front")
+            print("Angle in overlap open in front")
             return True
     if right == False:
-        #print("in right")
+        print("in right")
         if (atg >= right_angle[0] and atg <= right_angle[1]):
-            # print("Right open")
-            if right_back == True:
-                return False
+            print("Right open")
             return True
         if (right_angle[0] > right_angle[1]) and (atg >= (right_angle[0]-360) and atg <= right_angle[1]):
-            #print("Angle in overlap within right")
-            if right_back == True:
-                return False
+            print("Angle in overlap within right")
             return True
     if left == False:
         print("in left")
         if (atg >= left_angle[0] and atg < left_angle[1]):
-            # print("Left Open")
-            if left_back == True: 
-                return False
+            print("Left Open")
             return True
         if (left_angle[0] > left_angle[1]) and (atg >= (left_angle[0]) and atg <= left_angle[1]+360):
             print("Angle in overlap within left")
-            if left_back == True:
-                return False
             return True
         
     # print("Not Open")
@@ -187,14 +179,14 @@ if __name__ == "__main__":
         elif state == 'wall_following':
             print("Running wall following")
             #calculate the if a wall is on the left, right or front of the robot
-            left_wall = ((left_ir_values[0] + left_ir_values[1]) /2) > 80
-            front_wall = ((front_ir_values[0] + front_ir_values[1]) / 2) > 80
-            right_wall = ((right_ir_values[0] + right_ir_values[1]) /2) > 80
+            left_wall = ((left_ir_values[0] + left_ir_values[1]) /2) > 75
+            front_wall = ((front_ir_values[0] + front_ir_values[1]) / 2) > 75
+            right_wall = ((right_ir_values[0] + right_ir_values[1]) /2) > 75
             left_back = left_back_ir_values > 80
             right_back = right_back_ir_values > 80
-            #print("Left wall: ", left_wall)
-            #print("Front wall: ", front_wall)
-            #print("Right wall: ", right_wall)
+            print("Left wall: ", left_ir_values[0], " and ", left_ir_values[1])
+            print("Front wall: ", front_ir_values[0], " and ", front_ir_values[1])
+            print("Right wall: ", right_ir_values[0], " and ", right_ir_values[1])
 
             #calculate angle to goal
             angle_to_goal = calculate_target_angle(gps_values, goal_pos)
@@ -274,9 +266,9 @@ if __name__ == "__main__":
             else:
                 print("Running else")
                 if turn_direction == 'CW':
-                    update_motor_speed(input_omega=[robot_speed, robot_speed/10])
+                    update_motor_speed(input_omega=[robot_speed, robot_speed/2])
                 elif turn_direction == 'CCW':
-                    update_motor_speed(input_omega=[robot_speed/10, robot_speed])                # print("Prev Changed 2")
+                    update_motor_speed(input_omega=[robot_speed/2, robot_speed])                # print("Prev Changed 2")
                 prev = state
 
 

@@ -1795,7 +1795,7 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "bug0"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
