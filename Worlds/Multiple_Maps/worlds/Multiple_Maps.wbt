@@ -8,7 +8,7 @@ WorldInfo {
 }
 Viewpoint {
   orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0944
-  position -2.229220264465258e-06 -2.229226567875365e-06 9.211629603502493
+  position 9.89998725486985e-06 9.900015248370875e-06 13.501160025258546
 }
 TexturedBackground {
 }
@@ -65,7 +65,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.026000000000000818 0.02
+        translation 0 0.026000000000001338 0.02
         rotation 0 1 0 1.7526063104641838
         children [
           DEF EPUCK_WHEEL Pose {
@@ -218,7 +218,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.026000000000000942 0.02
+        translation 0 -0.02600000000000129 0.02
         rotation 0 1 0 0.6390347173460105
         children [
           Pose {
@@ -1792,7 +1792,7 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "alg2"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
