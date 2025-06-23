@@ -1,0 +1,14 @@
+EPUCK_TIME_STEP,32
+epuck_weight,0.16
+epuck_diameter,0.071
+epuck_height,0.05
+epuck_axle_length,0.052
+epuck_max_fwd_speed,1.25
+epuck_max_rot_speed,6.28
+epuck_wheel_radius,0.0205
+waypoint_heading_tolerance,0.05
+waypoint_reached_tolerance,0.1
+quadrotor_mass,0.027
+world_gravity,9.81
+wall_dist_proportional_val,0.005
+wall_tgt_distance,80
