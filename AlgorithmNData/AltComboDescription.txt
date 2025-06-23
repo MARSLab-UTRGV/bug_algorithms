@@ -1,0 +1,21 @@
+AltCombo Algorithm
+
+Summary: Is a combination of the style of ComboBug and Rev1 and Rev2. Enhancing ComboBug using
+directional switch methods similar to the Rev algorithms.
+
+1. The robot will initialize and record the m-line and set the wall following status (This will
+   record which method is being used at the moment and always starts with common-sense.) and the
+   turn status (which starts at CW)
+   Continues to step 2.
+2. The robot moves towards the target.
+3. If the robot encounters an obstacle it record the coordinates where it hit the obstacle and 
+   will start step 4 (Wall Following). Else it will keep moving towards the target.
+4. The robot will follow along the wall based on the turn status and check if the pathway to the
+   target is free and closer than hit point. Then it will check:
+      a. If wall following status is common-sense: the robot will move towards the target,
+	 change the wall following status to m-line and the turn-status to CCW. Continue to 
+         step 2.
+      b. If wall following status is m-line and is on m-line: the robot will move towards the 
+         target on the m-line, change the wall following status to common-sense and the turn 
+         status to CW. Continue to step 2.
+      c. Else: repeat step 4 until the robot reached the target.

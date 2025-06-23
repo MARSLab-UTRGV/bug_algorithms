@@ -31,7 +31,7 @@ def equivalent_point_on_mline(x, b, m):
     y = m*x + b
     return y, x
 
-def is_open(yaw, atg, right, left, front):
+def is_open(yaw, atg, right, left, front, left_back, right_back):
     print("Checking if open")
     print("Right Wall: ", right)
     print("Left Wall: ", left)
@@ -82,17 +82,25 @@ def is_open(yaw, atg, right, left, front):
         #print("in right")
         if (atg >= right_angle[0] and atg <= right_angle[1]):
             # print("Right open")
+            if right_back == True:
+                return False
             return True
         if (right_angle[0] > right_angle[1]) and (atg >= (right_angle[0]-360) and atg <= right_angle[1]):
             #print("Angle in overlap within right")
+            if right_back == True:
+                return False
             return True
     if left == False:
         print("in left")
         if (atg >= left_angle[0] and atg < left_angle[1]):
             # print("Left Open")
+            if left_back == True: 
+                return False
             return True
         if (left_angle[0] > left_angle[1]) and (atg >= (left_angle[0]) and atg <= left_angle[1]+360):
             print("Angle in overlap within left")
+            if left_back == True:
+                return False
             return True
         
     # print("Not Open")
@@ -134,6 +142,8 @@ if __name__ == "__main__":
         front_ir_values = ir_value[0], ir_value[7]
         right_ir_values = ir_value[1], ir_value[2]
         left_ir_values = ir_value[5], ir_value[6]
+        right_back_ir_values = ir_value[3]
+        left_back_ir_values = ir_value[4]
         on_m_line = is_on_M_line(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1], m_line)
         on_temp_line = False
         if temp_m_line != None:
@@ -180,6 +190,8 @@ if __name__ == "__main__":
             left_wall = ((left_ir_values[0] + left_ir_values[1]) /2) > 80
             front_wall = ((front_ir_values[0] + front_ir_values[1]) / 2) > 80
             right_wall = ((right_ir_values[0] + right_ir_values[1]) /2) > 80
+            left_back = left_back_ir_values > 80
+            right_back = right_back_ir_values > 80
             #print("Left wall: ", left_wall)
             #print("Front wall: ", front_wall)
             #print("Right wall: ", right_wall)
@@ -188,7 +200,7 @@ if __name__ == "__main__":
             angle_to_goal = calculate_target_angle(gps_values, goal_pos)
 
             #calculate if path is open
-            open_path = is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall)
+            open_path = is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall, left_back, right_back)
 
 
             #calculates the distance from the previous hit point to the goal 
@@ -216,7 +228,7 @@ if __name__ == "__main__":
 
             # is on current m-line after wall following, creates leave point and moves into alignment state 
             # To correctly determine leave points: check that the obstacle is not between the robot and goal using left and right wall sensors
-            elif (on_m_line or on_temp_line) and is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and prev == 'wall_following':
+            elif (on_m_line or on_temp_line) and is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall, left_back, right_back) and prev == 'wall_following':
                 print("On m-line!")
                 # elif determines if the robot is on the m-line and has made turns
                 # if statement determines that the robot is not above/further away from the goal than its original hit point
@@ -227,6 +239,7 @@ if __name__ == "__main__":
                     state = 'align_robot_heading'
                     wf_state = ""
                     ewf_prev = ""
+                    turn_direction = 'CW'
         
 
             # following wall on the right-side of the robot, moves forward and straight
@@ -239,10 +252,7 @@ if __name__ == "__main__":
                     state = 'align_robot_heading'
                     wf_prev = ""
                     wf_state = ""
-                    if turn_direction == 'CW':
-                        turn_direction = 'CCW'
-                    else:
-                        turn_direction = 'CW'
+                    turn_direction = 'CCW'
                 print("Running Right/Left Wall") 
                 update_motor_speed(input_omega=[robot_speed, robot_speed])
                 wf_prev = wf_state

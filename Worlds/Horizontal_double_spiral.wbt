@@ -8,40 +8,79 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896257 0.5773502691896257 0.5773502691896257 2.0943245915045035
-  position 0.0007188457468440795 0.00047622795826880043 7.363276478150347
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
+  position 0.00020447091787682302 1.59238075525689e-06 8.038489102727821
 }
 TexturedBackground {
 }
 TexturedBackgroundLight {
 }
 RectangleArena {
-  floorSize 2.5 2.5
+  floorSize 3 3
 }
 Wall {
+  translation 0.017984 -0.035024 0
   rotation 0 0 1 1.57
-  size 0.75 0.075 0.1
+  size 0.8 0.1 0.1
 }
 Wall {
-  translation 0.34 0.375 0
+  translation 0.275556 0.315 0
   name "wall(1)"
-  size 0.75 0.1 0.1
+  size 0.6 0.1 0.1
 }
 Wall {
-  translation 0.34 -0.375 0
+  translation 0.34 -0.405 0
   name "wall(2)"
   size 0.75 0.1 0.1
 }
+Wall {
+  translation 0.6642 -0.16053 0
+  rotation 0 0 1 1.57
+  name "wall(3)"
+  size 0.5 0.1 0.1
+}
+Wall {
+  translation -0.44508 -0.0998328 0
+  rotation 0 0 1 1.57
+  name "wall(6)"
+  size 1.5 0.1 0.1
+}
+Wall {
+  translation 1.03688 0.019928 0
+  rotation 0 0 1 1.57
+  name "wall(8)"
+  size 1.7 0.1 0.1
+}
+Wall {
+  translation 0.515556 0.045 0
+  name "wall(4)"
+  size 0.4 0.1 0.1
+}
+Wall {
+  translation 0.6325 0.85 0
+  name "wall(5)"
+  size 0.9 0.1 0.1
+}
+Wall {
+  translation -0.015 0.6 0
+  name "wall(9)"
+  size 0.85 0.1 0.1
+}
+Wall {
+  translation 0.34 -0.8 0
+  name "wall(7)"
+  size 1.5 0.1 0.1
+}
 DEF bug Robot {
-  translation 1.03294 -0.0193548 -0.0031688
-  rotation 0.002056429477749581 0.002299896750631243 -0.9999952407750446 1.4536522628615571
+  translation -1.12084 -0.150144 0.000274517
+  rotation -6.091973968831098e-05 0.0006530668868782613 0.9999997848961902 0.3081505048632764
   children [
     InertialUnit {
       name "inertial_unit"
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 14.323776823381188
+        position 990.3420353790956
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -57,8 +96,8 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.0259999999999997 0.02
-        rotation 0 1 0 1.7574062090220148
+        translation 0 0.02600000000000027 0.02
+        rotation 0 -1 0 2.401243155279072
         children [
           DEF EPUCK_WHEEL Pose {
             rotation 1 0 0 -1.570796
@@ -194,7 +233,7 @@ DEF bug Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 0.5430438413125326
+        position 978.4730509502457
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -210,8 +249,8 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.026000000000000873 0.02
-        rotation 0 1 0 0.5430438413125321
+        translation 0 -0.026000000000000714 0.02
+        rotation 0 -1 0 1.7038569697697978
         children [
           Pose {
             rotation 1 0 0 3.14159
@@ -1784,13 +1823,13 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "combobug"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
 }
 DEF goal Solid {
-  translation -0.65 -0.04 0
+  translation 0.4 -0.18 0
   children [
     DEF post Shape {
       appearance PBRAppearance {
@@ -1800,7 +1839,7 @@ DEF goal Solid {
       }
       geometry Cylinder {
         height 0.1
-        radius 0.075
+        radius 0.05
       }
     }
   ]

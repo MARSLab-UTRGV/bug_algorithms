@@ -1823,7 +1823,7 @@ DEF bug Robot {
       0 0 0
     ]
   }
-  controller "combobug"
+  controller "altcombo"
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
