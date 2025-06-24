@@ -29,4 +29,18 @@ Maze map now available; needed to add shape w/ transform w/ cadshape to the .obj
 Wednesday 8:32 AM
 Maze map failing physics. Current Readjustment.....
 
+UPDATES MOVED TO OVERLEAF
 
+Now converting to a log of completed tasks
+Monday 1PM-10PM
+Successful merge of Andres branch and Izabella Branch
+Run times recorded for Easy Maps
+Seems to be issue with some of the m-line algorithms not detecting m-line, need to debug
+Medium Maps ran, lots of issues with maps. Narrow spaces, hard to move easily for robot. 
+Overleaf updated to have description of maps
+All code updated:
+Initialization files are all the same. Number of comments reduced. Moved all functions used in the algorithm files to exist in the initialization files.
+Algorithm files had comment reduction. Edited all code to ensure debugging print statements are commented out unless needed and descriptions of code is shorter.
+Algorithms ran again on Easy Map 1. Error on the AltComboBug.
+Fixed Error on AltComboBug. Needed to tighten the turns. Corner_turn_speed updated to 12 on all algorithms.
+Rerun of all algorithms with same turn style.
