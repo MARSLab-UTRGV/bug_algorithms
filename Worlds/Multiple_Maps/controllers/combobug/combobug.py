@@ -4,6 +4,10 @@ import numpy as np
 from initialization import *
 import math
 
+# leave all comments for readability purposes
+# leave all print statements for debugging purposes
+# create a new comment if you make changes
+
 if __name__ == "__main__":
     TIME_STEP = 32
     
@@ -19,25 +23,22 @@ if __name__ == "__main__":
     b = m_line_b(start_pos[0], start_pos[1], m_line)
     state = 'start'
     robot_speed = 3
+    corner_turn_speed = 12
     hit_point = []
     leave_point = []
     turn_direction = 'left'
     starttime = robot.getTime()
-    
     trail_counter = 0
 
     while robot.step(TIME_STEP) != -1:
         
         gps_values, compass_val, encoder_value, ir_value, imu_yaw = read_sensors_values()
         
-        # --- LOGIC TO DROP A TRAIL SPHERE ---
+        # logic to drop trail sphere
         trail_counter += 1
         if trail_counter % 15 == 0 and trail_group_children_field is not None:
             pos = gps_values
             
-            # ** THIS IS THE CORRECTED STRING **
-            # A Transform node with a Shape child is already non-physical.
-            # The 'boundingObject NULL' was incorrect and has been removed.
             sphere_string = f"""
                 Transform {{
                     translation {pos[0]} {pos[1]} 0.01
@@ -54,7 +55,6 @@ if __name__ == "__main__":
                 }}
             """
             trail_group_children_field.importMFNodeFromString(-1, sphere_string)
-        # -------------------------------------------
 
         front_ir_values = ir_value[0], ir_value[7]
         right_ir_values = ir_value[1], ir_value[2]
@@ -64,12 +64,17 @@ if __name__ == "__main__":
         if state == 'start':
             prev = state 
             state = 'align_robot_heading'
+
+        # checks to see if robot is aligned. if aligned to the direction of the goal position, start moving
         elif state == 'align_robot_heading':
             print("Running alignment")
             is_aligned = align_to_M(calculate_target_angle(gps_values, goal_pos), imu_yaw)
+            # print("target angle: ", calculate_target_angle(gps_values, goal_pos))
+            # print("imu yaw: ", imu_yaw)
             if is_aligned: 
                 prev = state
                 state = 'move_to_goal'
+
         elif state == 'move_to_goal':
             print("Running move to goal")
             update_motor_speed(input_omega=[robot_speed, robot_speed])
@@ -79,6 +84,8 @@ if __name__ == "__main__":
                 prev = state
                 state = 'wall_following'
                 hit_point.append([gps_values[0], gps_values[1]])
+
+        # follows perimeter of obstacle.
         elif state == 'wall_following':
             print("Running wall following")
             left_wall = ((left_ir_values[0] + left_ir_values[1]) /2) > 80
@@ -87,14 +94,18 @@ if __name__ == "__main__":
             angle_to_goal = calculate_target_angle(gps_values, goal_pos)
             prev_distance = calculate_euclidean_distance(hit_point[-1][0], hit_point[-1][1], goal_pos[0], goal_pos[1])
             curr_distance = calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])
-            print("WF State: ", wf_state)
-            print("WF Prev: ", wf_prev)
-            if front_wall: 
+            # print("Previous distance: ", prev_distance)
+            # print("Current Distance: ", curr_distance)
+            # print("WF State: ", wf_state)
+            # print("WF Prev: ", wf_prev)
+
+            if front_wall: #obstacle in front
                 print("Running front wall")
                 update_motor_speed(input_omega=[-1*robot_speed, robot_speed])
                 wf_prev = wf_state
                 wf_state = 'front'
-            elif (is_on_M_line(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1], m_line)) and is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and prev == 'wall_following':
+            
+            elif (is_on_M_line(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1], m_line)) and is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and prev == 'wall_following': # determine to leave wall following
                 print("On m-line!")
                 if curr_distance < prev_distance:
                     leave_point.append([gps_values[0], gps_values[1]])
@@ -102,7 +113,8 @@ if __name__ == "__main__":
                     state = 'align_robot_heading'
                     wf_state = ""
                     ewf_prev = ""
-            elif right_wall:
+            
+            elif right_wall: # moves forward while wall detected
                 if is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and (curr_distance < prev_distance):
                     print("Direction to goal is open")
                     leave_point.append([gps_values[0], gps_values[1]])
@@ -114,20 +126,23 @@ if __name__ == "__main__":
                 update_motor_speed(input_omega=[robot_speed, robot_speed])
                 wf_prev = wf_state
                 wf_state = 'right_wall'
-            elif (wf_state == 'right_wall' and right_wall==False) or (wf_state == 'right_turn' and right_wall==False):
+            
+            elif (wf_state == 'right_wall' and right_wall==False) or (wf_state == 'right_turn' and right_wall==False): # turn around corners
                 print("Running right turn")
-                update_motor_speed(input_omega=[robot_speed, robot_speed/20])
+                update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
                 prev = state
                 wf_prev = wf_state
                 wf_state = 'right_turn'
-        elif state == 'end':
+        
+        elif state == 'end': # end state
             print("Running end state")
-            update_motor_speed(input_omega=[0, 0, 0])
+            update_motor_speed(input_omega=[0, 0, 0]) # stop
             endtime = robot.getTime()
             elapsedtime = endtime - starttime
             print(f"Time taken to reach goal: {elapsedtime:.2f} seconds")
             break
-        elif(calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])< 0.1):
+        
+        elif(calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])< 0.1): # fallback end state
             state = 'end'
             break
     pass
