@@ -74,8 +74,8 @@ if __name__ == "__main__":
         elif state == 'align_robot_heading':
             print("Running alignment")
             is_aligned = align_to_M(calculate_target_angle(gps_values, goal_pos), imu_yaw)
-           # print("target angle: ", calculate_target_angle(gps_values, goal_pos))
-           # print("imu yaw: ", imu_yaw)
+            # print("target angle: ", calculate_target_angle(gps_values, goal_pos))
+            # print("imu yaw: ", imu_yaw)
             if is_aligned: 
                 prev = state
                 state = 'move_to_goal'
