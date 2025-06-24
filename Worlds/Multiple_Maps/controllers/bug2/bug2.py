@@ -101,7 +101,7 @@ def calculate_slope(x1, y1, x2, y2):
 
 # boolean function: Checks if robot is on m_line
 # write in the m-line to compare instead of calculating the slope every time
-def is_on_M_line(currX, currY, goalX, goalY, m_line, threshold=0.1):
+def is_on_M_line(currX, currY, goalX, goalY, m_line, threshold=0.5):
     slope = calculate_slope(currX, currY, goalX, goalY)
     #print("Running M-Line Function")
     #print("Slope: ", slope)

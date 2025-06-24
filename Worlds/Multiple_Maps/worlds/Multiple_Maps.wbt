@@ -1,4 +1,4 @@
-#VRML_SIM R2023b utf8
+#VRML_SIM R2025a utf8
 
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
@@ -65,11 +65,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-<<<<<<< HEAD
-        translation 0 0.02600000000000083 0.02
-=======
         translation 0 0.026000000000001338 0.02
->>>>>>> origin/Andres
         rotation 0 1 0 1.7526063104641838
         children [
           DEF EPUCK_WHEEL Pose {
@@ -222,11 +218,7 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-<<<<<<< HEAD
-        translation 0 -0.026000000000000956 0.02
-=======
         translation 0 -0.02600000000000129 0.02
->>>>>>> origin/Andres
         rotation 0 1 0 0.6390347173460105
         children [
           Pose {
@@ -1800,11 +1792,7 @@ DEF bug Robot {
       0 0 0
     ]
   }
-<<<<<<< HEAD
-  controller "bug0"
-=======
   controller "altcombo"
->>>>>>> origin/Andres
   supervisor TRUE
   cpuConsumption 1.11
   remoteControl ""
