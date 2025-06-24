@@ -21,7 +21,7 @@ if __name__ == "__main__":
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
     state = 'start'
     robot_speed = 3
-    corner_turn_speed = 12
+    corner_turn_speed = 15
     hit_point = []
     leave_point = []
     starttime = robot.getTime()

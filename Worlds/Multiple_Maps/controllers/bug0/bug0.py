@@ -21,7 +21,7 @@ if __name__ == "__main__":
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
     state = 'start'
     robot_speed = 3
-    corner_turn_speed = 12
+    corner_turn_speed = 15
     hit_point = []
     leave_point = []
     starttime = robot.getTime()
@@ -102,17 +102,19 @@ if __name__ == "__main__":
             # print("Current Distance: ", curr_distance)
 
             if front_wall: # obstacle in front
+                print("front wall detected")
                 wf_prev = wf_state
                 wf_state = 'front_wall'
                 update_motor_speed(input_omega=[-1*robot_speed, robot_speed])
             
             elif right_wall ^ left_wall: # moves forward while wall detected
+                print("side wall detected")
                 wf_prev = wf_state
                 wf_state = 'wall detected'
                 update_motor_speed(input_omega=[robot_speed, robot_speed])
                 if right_wall: print("touching wall on right")
                 elif left_wall: print("touching wall on left")
-                if (open_path and curr_distance < prev_distance) and wf_prev == 'wall detected':
+                if (open_path and curr_distance < prev_distance) and not wf_prev == 'else':
                     leave_point.append([gps_values[0], gps_values[1]])
                     prev = state
                     state = 'align_robot_heading'
@@ -120,6 +122,7 @@ if __name__ == "__main__":
                     wf_prev = ''
             
             else: # turn around corners
+                print('else state')
                 wf_prev = wf_state
                 wf_state = 'else'
                 update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
