@@ -264,3 +264,10 @@ def is_open(yaw, atg, right, left, front):
             print("Angle in overlap within left")
             return True
     return False
+
+def normalize_angle(angle):
+    if angle < 0:
+        angle += 360
+    if angle > 360:
+        angle -= 360
+    return angle

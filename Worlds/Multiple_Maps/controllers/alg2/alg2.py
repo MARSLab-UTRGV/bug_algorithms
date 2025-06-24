@@ -22,6 +22,7 @@ if __name__ == "__main__":
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
     state = 'start'
     robot_speed = 3
+    corner_turn_speed = 12
     hit_point = []
     leave_point = []
     next_turn = 'left'
@@ -165,9 +166,9 @@ if __name__ == "__main__":
             else: # for getting around corners
                 print("Running else")
                 if next_turn == 'left':
-                    update_motor_speed(input_omega=[robot_speed, robot_speed/8])
+                    update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
                 elif next_turn == 'right':
-                    update_motor_speed(input_omega=[robot_speed/8, robot_speed])
+                    update_motor_speed(input_omega=[robot_speed/corner_turn_speed, robot_speed])
                 prev = state
 
         elif state == 'end':

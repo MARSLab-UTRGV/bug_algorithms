@@ -28,7 +28,6 @@ if __name__ == "__main__":
     leave_point = []    # x, y
     turn_direction = 'CW'
     starttime = robot.getTime()
-
     trail_counter = 0
 
     # robot loop
@@ -94,7 +93,6 @@ if __name__ == "__main__":
         # follows perimeter of obstacle.
         elif state == 'wall_following':
             print("Running wall following")
-            # calculate the if a wall is on the left, right or front of the robot
             left_wall = (left_ir_values[0]) > 80
             front_wall = ((front_ir_values[0] + front_ir_values[1]) / 2) > 80
             right_wall = (right_ir_values[1]) > 80
@@ -155,7 +153,7 @@ if __name__ == "__main__":
 
         elif state == 'end': # end state
             print("Running end state")
-            update_motor_speed(input_omega=[0, 0, 0]) #end
+            update_motor_speed(input_omega=[0, 0, 0]) # stop
             endtime = robot.getTime()
             elapsedtime = endtime-starttime
             print(f"Time taken to reach goal: {elapsedtime:.2f} seconds")
