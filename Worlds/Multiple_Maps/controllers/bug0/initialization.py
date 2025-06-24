@@ -245,6 +245,7 @@ def is_open(yaw, atg, right, left, front):
     front_angle = [normalized_frontone, normalized_fronttwo]
     right_angle = [normalized_right, front_angle[0]]
     left_angle = [front_angle[1], normalized_left]
+    #print("Front angle: ", front_angle, " Right angle: ", right_angle, " Left angle: ", left_angle)
 
     if front == False:
         if (atg >= front_angle[0] and atg <= front_angle[1]):
@@ -257,11 +258,9 @@ def is_open(yaw, atg, right, left, front):
         if (right_angle[0] > right_angle[1]) and (atg >= (right_angle[0]-360) and atg <= right_angle[1]):
             return True
     if left == False:
-        print("in left")
         if (atg >= left_angle[0] and atg < left_angle[1]):
             return True
         if (left_angle[0] > left_angle[1]) and (atg >= (left_angle[0]) and atg <= left_angle[1]+360):
-            print("Angle in overlap within left")
             return True
     return False
 

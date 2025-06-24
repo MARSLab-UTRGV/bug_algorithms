@@ -25,6 +25,8 @@ if __name__ == "__main__":
     hit_point = []
     leave_point = []
     starttime = robot.getTime()
+    wf_state = ''
+    wf_prev = ''
     trail_counter = 0
 
     # robot loop
@@ -100,18 +102,26 @@ if __name__ == "__main__":
             # print("Current Distance: ", curr_distance)
 
             if front_wall: # obstacle in front
+                wf_prev = wf_state
+                wf_state = 'front_wall'
                 update_motor_speed(input_omega=[-1*robot_speed, robot_speed])
             
             elif right_wall ^ left_wall: # moves forward while wall detected
+                wf_prev = wf_state
+                wf_state = 'wall detected'
                 update_motor_speed(input_omega=[robot_speed, robot_speed])
                 if right_wall: print("touching wall on right")
                 elif left_wall: print("touching wall on left")
-                if open_path and curr_distance < prev_distance:
+                if (open_path and curr_distance < prev_distance) and wf_prev == 'wall detected':
                     leave_point.append([gps_values[0], gps_values[1]])
                     prev = state
                     state = 'align_robot_heading'
+                    wf_state = ''
+                    wf_prev = ''
             
             else: # turn around corners
+                wf_prev = wf_state
+                wf_state = 'else'
                 update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
                 prev = state
 
