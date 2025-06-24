@@ -32,7 +32,7 @@ Maze map failing physics. Current Readjustment.....
 UPDATES MOVED TO OVERLEAF
 
 Now converting to a log of completed tasks
-Monday 1PM-10PM
+6/23/25 Monday 1PM-10PM
 Successful merge of Andres branch and Izabella Branch
 Run times recorded for Easy Maps
 Seems to be issue with some of the m-line algorithms not detecting m-line, need to debug
@@ -71,3 +71,10 @@ instead using a wf_state and wf_prev variable helped MASSIVELY. should add to al
 
 Easy Map 1 redone with all algorithms with same variables (turn speed and threshold widths)
 Videos recorded of EasyMap1 with all algorithms
+
+6/24/25 Tuesday 12PM-3PM
+corner turn speed changed to 15
+corner turn speed changed back to 12
+Rev2 needed wf_state and wf_prev added to help round corners correctly. 
+ComboBug had wf_state and wf_prev but needed adjustments since it would incorrectly read in some places and miss corners. 
+

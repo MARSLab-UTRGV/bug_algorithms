@@ -15,9 +15,7 @@ if __name__ == "__main__":
     
     print("Robot Initialized")
     init_robot_state(in_pos=[0,0,0], in_omega=[0,0])
-    prev = ""
-    wf_state = ""
-    wf_prev = ""
+    prev = ''
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
     original_m_line = m_line
     b = m_line_b(start_pos[0], start_pos[1], m_line)
@@ -28,6 +26,8 @@ if __name__ == "__main__":
     leave_point = []
     turn_direction = 'left'
     starttime = robot.getTime()
+    wf_state = ''
+    wf_prev = ''
     trail_counter = 0
 
     while robot.step(TIME_STEP) != -1:
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         
         # logic to drop trail sphere
         trail_counter += 1
-        if trail_counter % 15 == 0 and trail_group_children_field is not None:
+        if trail_counter % 30 == 0 and trail_group_children_field is not None:
             pos = gps_values
             
             sphere_string = f"""
@@ -88,16 +88,17 @@ if __name__ == "__main__":
         # follows perimeter of obstacle.
         elif state == 'wall_following':
             print("Running wall following")
-            left_wall = ((left_ir_values[0] + left_ir_values[1]) /2) > 80
+            left_wall = left_ir_values[0] > 80
             front_wall = ((front_ir_values[0] + front_ir_values[1]) / 2) > 80
-            right_wall = ((right_ir_values[0] + right_ir_values[1]) /2) > 80
+            right_wall =  right_ir_values[1] > 80
             angle_to_goal = calculate_target_angle(gps_values, goal_pos)
+            open_path = is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall)
             prev_distance = calculate_euclidean_distance(hit_point[-1][0], hit_point[-1][1], goal_pos[0], goal_pos[1])
             curr_distance = calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])
-            # print("Previous distance: ", prev_distance)
-            # print("Current Distance: ", curr_distance)
-            # print("WF State: ", wf_state)
-            # print("WF Prev: ", wf_prev)
+            print("Previous distance: ", prev_distance)
+            print("Current Distance: ", curr_distance)
+            print("WF State: ", wf_state)
+            print("WF Prev: ", wf_prev)
 
             if front_wall: #obstacle in front
                 print("Running front wall")
@@ -115,24 +116,25 @@ if __name__ == "__main__":
                     ewf_prev = ""
             
             elif right_wall: # moves forward while wall detected
-                if is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and (curr_distance < prev_distance):
+                print("Running Right Wall") 
+                update_motor_speed(input_omega=[robot_speed, robot_speed])
+                if open_path and (curr_distance < prev_distance) and not (wf_prev == 'front' or wf_prev == 'else'):
                     print("Direction to goal is open")
                     leave_point.append([gps_values[0], gps_values[1]])
                     prev = state
                     state = 'align_robot_heading'
                     wf_prev = ""
                     wf_state = ""
-                print("Running Right Wall") 
-                update_motor_speed(input_omega=[robot_speed, robot_speed])
                 wf_prev = wf_state
-                wf_state = 'right_wall'
+                wf_state = 'right_wall' 
+                
             
-            elif (wf_state == 'right_wall' and right_wall==False) or (wf_state == 'right_turn' and right_wall==False): # turn around corners
+            else: # (wf_state == 'right_wall' and right_wall==False) or (wf_state == 'else' and right_wall==False): # turn around corners
                 print("Running right turn")
                 update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
                 prev = state
                 wf_prev = wf_state
-                wf_state = 'right_turn'
+                wf_state = 'else'
         
         elif state == 'end': # end state
             print("Running end state")

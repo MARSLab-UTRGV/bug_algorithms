@@ -17,11 +17,11 @@ if __name__ == "__main__":
     
     print("Robot Initialized")
     init_robot_state(in_pos=[0,0,0], in_omega=[0,0])
-    prev = ""
+    prev = ''
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
     state = 'start'
     robot_speed = 3
-    corner_turn_speed = 15
+    corner_turn_speed = 12
     hit_point = []
     leave_point = []
     starttime = robot.getTime()
@@ -69,7 +69,7 @@ if __name__ == "__main__":
         elif state == 'align_robot_heading':
             is_aligned = align_to_M(calculate_target_angle(gps_values, goal_pos), imu_yaw)
             # print("target angle: ", calculate_target_angle(gps_values, goal_pos))
-           # print("imu yaw: ", imu_yaw)
+            # print("imu yaw: ", imu_yaw)
             if is_aligned: 
                 prev = state
                 state = 'move_to_goal'
@@ -114,7 +114,8 @@ if __name__ == "__main__":
                 update_motor_speed(input_omega=[robot_speed, robot_speed])
                 if right_wall: print("touching wall on right")
                 elif left_wall: print("touching wall on left")
-                if (open_path and curr_distance < prev_distance) and not wf_prev == 'else':
+                if (open_path and curr_distance < prev_distance) and not wf_prev == 'else': # determine to leave wall following
+                    # print("Direction to goal is open")
                     leave_point.append([gps_values[0], gps_values[1]])
                     prev = state
                     state = 'align_robot_heading'
@@ -122,7 +123,7 @@ if __name__ == "__main__":
                     wf_prev = ''
             
             else: # turn around corners
-                print('else state')
+                print("Running else")
                 wf_prev = wf_state
                 wf_state = 'else'
                 update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])

@@ -10,32 +10,25 @@ import math
 
 if __name__ == "__main__":
     TIME_STEP = 32
-    robot, goal_pos, start_pos = init_robot(time_step=TIME_STEP)
+    robot, goal_pos, start_pos, trail_group_children_field = init_robot(time_step=TIME_STEP)
     
     print("Robot Initialized")
     init_robot_state(in_pos=[0,0,0], in_omega=[0,0])
-    prev = ""
+    prev = ''
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
-    state = 'align_robot_heading'
-    wf_state = ""
-    wf_prev = ""
+    state = 'start'
     robot_speed = 3
     corner_turn_speed = 12
-    forward_left_speeds = [robot_speed, robot_speed]
-    far_from_wall_counter = 0
-    close_to_wall_counter = 0
     hit_point = []      # x, y
     leave_point = []    # x, y
-
     starttime = robot.getTime()
-
-    # Determine the default turn style of turning to the left and right_wall following
+    wf_state = ''
+    wf_prev = ''
+    trail_counter = 0
     next_turn = 'left'
 
     # robot loop
     while robot.step(TIME_STEP) != -1:
-
-        # trash variable for unused sonar. can be taken out of initialization.py
         gps_values, compass_val, encoder_value, ir_value, imu_yaw = read_sensors_values()
 
         # logic to drop trail sphere
@@ -64,11 +57,11 @@ if __name__ == "__main__":
         front_ir_values = ir_value[0], ir_value[7]
         right_ir_values = ir_value[1], ir_value[2]
         left_ir_values = ir_value[5], ir_value[6]
-        left_wall = (left_ir_values[0] + left_ir_values[1])/2 > 80
-        front_wall = (front_ir_values[0] + front_ir_values[1])/2 > 80
-        right_wall = (right_ir_values[0] + right_ir_values[0])/2 > 80
+        
         update_robot_state()
-            
+        if state == 'start':
+            prev = state
+            state = 'align_robot_heading'
 
         # checks to see if robot is aligned. if align, start moving
         if state == 'align_robot_heading':
@@ -95,6 +88,13 @@ if __name__ == "__main__":
         # follows perimeter of obstacle.
         elif state == 'wall_following':
             print("Running wall_following state")
+            left_wall = left_ir_values[0] > 80
+            front_wall = (front_ir_values[0] + front_ir_values[1])/2 > 80
+            right_wall = right_ir_values[0] > 80
+            # print("Left wall: ", left_ir_values[0])
+            # print("Front wall: ", front_ir_values[0], " and ", front_ir_values[1])
+            # print("Right wall: ", right_ir_values[1])
+
             angle_to_goal = calculate_target_angle(gps_values, goal_pos)
             open_path = is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall)
             prev_distance = calculate_euclidean_distance(hit_point[-1][0], hit_point[-1][1], goal_pos[0], goal_pos[1])
@@ -104,22 +104,27 @@ if __name__ == "__main__":
 
             if front_wall: # obstacle in front
                 print("Running front wall")
+                wf_prev = wf_state
+                wf_state = 'front_wall'
                 if next_turn == 'left':
                     update_motor_speed(input_omega=[-1*robot_speed, robot_speed])
                 else:
                     update_motor_speed(input_omega=[robot_speed, -1*robot_speed])
 
             elif right_wall ^ left_wall: # moves forward while wall detected
+                print("side wall detected")
+                wf_prev = wf_state
+                wf_state = 'wall detected'
                 update_motor_speed(input_omega=[robot_speed, robot_speed])
-                if right_wall:
-                    print("touching wall on right")
-                elif left_wall:
-                    print("touching wall on left")
-                if open_path and curr_distance < prev_distance: # determine to leave wall-following
+                # if right_wall: print("touching wall on right")
+                # elif left_wall: print("touching wall on left")
+                if (open_path and curr_distance < prev_distance) and not wf_prev == 'else': # determine to leave wall-following
                     print("Direction to goal is open")
                     leave_point.append([gps_values[0], gps_values[1]])
                     prev = state
                     state = 'align_robot_heading'
+                    wf_state = ''
+                    wf_prev = ''
                     if next_turn == 'left':
                         next_turn = 'right'
                     else:
@@ -128,6 +133,8 @@ if __name__ == "__main__":
 
             else: # turn around corners
                 print("Running else")
+                wf_prev = wf_state
+                wf_state = 'else'
                 if next_turn == 'left':
                     update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
                 elif next_turn == 'right':
