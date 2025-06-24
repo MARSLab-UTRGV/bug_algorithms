@@ -8,8 +8,8 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2023b/project
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.0944
-  position 0.0002548476910068359 1.2249225523519257e-05 6.48306431385773
+  orientation -0.5758201321221132 0.5693783533475303 0.5867192396556695 2.090197231564328
+  position 0.01009809204411971 -0.13706314172845774 6.473392298077505
 }
 TexturedBackground {
 }
@@ -58,15 +58,15 @@ Wall {
   size 0.4 0.1 0.1
 }
 DEF bug Robot {
-  translation -0.369522 1.03875 0.00179779
-  rotation 0.0038253782797429475 0.0025031488743441324 -0.9999895503087667 0.930057
+  translation -0.37902 1.07906 -8.12329e-05
+  rotation -3.08540205213842e-05 -6.124393080641496e-05 -0.9999999976486051 1.307603647025156
   children [
     InertialUnit {
       name "inertial_unit"
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 14.323776823381188
+        position 14.374976538960116
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -82,8 +82,8 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_LEFT_WHEEL Solid {
-        translation 0 0.025999999999999798 0.02
-        rotation 0 1 0 1.7574062090220148
+        translation 0 0.02599999999999975 0.02
+        rotation 0 1 0 1.808605924600943
         children [
           DEF EPUCK_WHEEL Pose {
             rotation 1 0 0 -1.570796
@@ -219,7 +219,7 @@ DEF bug Robot {
     }
     HingeJoint {
       jointParameters HingeJointParameters {
-        position 0.5430438413125326
+        position -0.4808623783999514
         axis 0 1 0
         anchor 0 0 0.02
       }
@@ -235,8 +235,8 @@ DEF bug Robot {
         }
       ]
       endPoint DEF EPUCK_RIGHT_WHEEL Solid {
-        translation 0 -0.026000000000000776 0.02
-        rotation 0 1 0 0.5430438413125321
+        translation 0 -0.026000000000000825 0.02
+        rotation 0 -1 0 0.4808623783999513
         children [
           Pose {
             rotation 1 0 0 3.14159

@@ -4,115 +4,9 @@ import numpy as np
 from initialization import *
 import math
 
-# Your original functions are all here and unchanged
-def calculate_target_angle(robot_pos, goal_pos):
-    dx = goal_pos[0] - robot_pos[0]
-    dy = goal_pos[1] - robot_pos[1]
-    angle_to_target = math.degrees(math.atan2(dx, dy))
-    if angle_to_target < 0:
-        angle_to_target += 360
-    elif angle_to_target > 360:
-        angle_to_target -= 360
-    angle_to_target *= -1
-    angle_to_target += 450
-    if angle_to_target < 0:
-        angle_to_target += 360
-    elif angle_to_target > 360:
-        angle_to_target -= 360
-    return angle_to_target
-
-def align_to_M(target_angle, yaw_angle, threshold = 0.5):
-    ts = 1
-    turn = 'left'
-    difference = target_angle - yaw_angle
-    halfway = target_angle - 180
-    if halfway < 0:
-        halfway += 360
-    if target_angle <= 180 and yaw_angle <= 180:
-        if target_angle < yaw_angle:
-            turn = 'right'
-        else: 
-            turn = 'left'
-    elif (target_angle <= 360 and yaw_angle <= 360) and (target_angle >=180 and yaw_angle >= 180):
-        if target_angle < yaw_angle:
-            turn = 'right'
-        else: 
-            turn = 'left'
-    else:
-        if yaw_angle > halfway:
-            turn = 'left'
-        else: 
-            turn = 'right'
-    if abs(difference) < threshold:
-        print("Aligned")
-        return True
-    else:
-        if turn == 'left':
-            update_motor_speed(input_omega=[-ts, ts/20])
-        else: 
-            update_motor_speed(input_omega=[ts/20, -ts])
-        return False
-
-def calculate_euclidean_distance(x1, y1, x2, y2):
-    return math.sqrt((x1-x2)**2 + (y1-y2)**2)
-
-def calculate_slope(x1, y1, x2, y2):
-    if (x1-x2) == 0:
-        return x1
-    return((y1-y2)/(x1-x2))
-
-def is_on_M_line(currX, currY, goalX, goalY, m_line, threshold=0.1):
-    slope = calculate_slope(currX, currY, goalX, goalY)
-    return abs(m_line - slope) < threshold
-
-def m_line_b(x, y, m):
-    return -m*x + y
-
-def equivalent_point_on_mline(x, b, m):
-    y = m*x + b
-    return y, x
-
-def is_open(yaw, atg, right, left, front):
-    print("Checking if open")
-    print("Right Wall: ", right)
-    print("Left Wall: ", left)
-    print("Front Wall: ", front)
-    print("yaw = ", yaw)
-    print("atg = ", atg)
-    normalized_right = yaw - 90
-    normalized_left = yaw + 90
-    normalized_frontone = yaw - 15
-    normalized_fronttwo = yaw + 15
-    if normalized_left > 360:
-        normalized_left -= 360
-    if normalized_right < 0:
-        normalized_right += 360
-    if normalized_frontone < 0:
-        normalized_frontone += 360
-    if normalized_fronttwo > 360:
-        normalized_fronttwo -= 360
-    front_angle = [normalized_frontone, normalized_fronttwo]
-    right_angle = [normalized_right, front_angle[0]]
-    left_angle = [front_angle[1], normalized_left]
-
-    if front == False:
-        if (atg >= front_angle[0] and atg <= front_angle[1]):
-            return True      
-        if (front_angle[0] > front_angle[1]) and (atg >= (front_angle[0]-360) and atg <= front_angle[1]):
-            return True
-    if right == False:
-        if (atg >= right_angle[0] and atg <= right_angle[1]):
-            return True
-        if (right_angle[0] > right_angle[1]) and (atg >= (right_angle[0]-360) and atg <= right_angle[1]):
-            return True
-    if left == False:
-        print("in left")
-        if (atg >= left_angle[0] and atg < left_angle[1]):
-            return True
-        if (left_angle[0] > left_angle[1]) and (atg >= (left_angle[0]) and atg <= left_angle[1]+360):
-            print("Angle in overlap within left")
-            return True
-    return False
+# leave all comments for readability purposes
+# leave all print statements for debugging purposes
+# create a new comment if you make changes
 
 if __name__ == "__main__":
     TIME_STEP = 32
@@ -121,33 +15,30 @@ if __name__ == "__main__":
     
     print("Robot Initialized")
     init_robot_state(in_pos=[0,0,0], in_omega=[0,0])
-    prev = ""
-    wf_state = ""
-    wf_prev = ""
+    prev = ''
     m_line = calculate_slope(goal_pos[0], goal_pos[1], start_pos[0], start_pos[1])
     original_m_line = m_line
     b = m_line_b(start_pos[0], start_pos[1], m_line)
     state = 'start'
     robot_speed = 3
+    corner_turn_speed = 12
     hit_point = []
     leave_point = []
     turn_direction = 'left'
     starttime = robot.getTime()
-    
+    wf_state = ''
+    wf_prev = ''
     trail_counter = 0
 
     while robot.step(TIME_STEP) != -1:
         
         gps_values, compass_val, encoder_value, ir_value, imu_yaw = read_sensors_values()
         
-        # --- LOGIC TO DROP A TRAIL SPHERE ---
+        # logic to drop trail sphere
         trail_counter += 1
-        if trail_counter % 15 == 0 and trail_group_children_field is not None:
+        if trail_counter % 30 == 0 and trail_group_children_field is not None:
             pos = gps_values
             
-            # ** THIS IS THE CORRECTED STRING **
-            # A Transform node with a Shape child is already non-physical.
-            # The 'boundingObject NULL' was incorrect and has been removed.
             sphere_string = f"""
                 Transform {{
                     translation {pos[0]} {pos[1]} 0.01
@@ -164,7 +55,6 @@ if __name__ == "__main__":
                 }}
             """
             trail_group_children_field.importMFNodeFromString(-1, sphere_string)
-        # -------------------------------------------
 
         front_ir_values = ir_value[0], ir_value[7]
         right_ir_values = ir_value[1], ir_value[2]
@@ -174,12 +64,17 @@ if __name__ == "__main__":
         if state == 'start':
             prev = state 
             state = 'align_robot_heading'
+
+        # checks to see if robot is aligned. if aligned to the direction of the goal position, start moving
         elif state == 'align_robot_heading':
             print("Running alignment")
             is_aligned = align_to_M(calculate_target_angle(gps_values, goal_pos), imu_yaw)
+            # print("target angle: ", calculate_target_angle(gps_values, goal_pos))
+            # print("imu yaw: ", imu_yaw)
             if is_aligned: 
                 prev = state
                 state = 'move_to_goal'
+
         elif state == 'move_to_goal':
             print("Running move to goal")
             update_motor_speed(input_omega=[robot_speed, robot_speed])
@@ -189,22 +84,29 @@ if __name__ == "__main__":
                 prev = state
                 state = 'wall_following'
                 hit_point.append([gps_values[0], gps_values[1]])
+
+        # follows perimeter of obstacle.
         elif state == 'wall_following':
             print("Running wall following")
-            left_wall = ((left_ir_values[0] + left_ir_values[1]) /2) > 80
+            left_wall = left_ir_values[0] > 80
             front_wall = ((front_ir_values[0] + front_ir_values[1]) / 2) > 80
-            right_wall = ((right_ir_values[0] + right_ir_values[1]) /2) > 80
+            right_wall =  right_ir_values[1] > 80
             angle_to_goal = calculate_target_angle(gps_values, goal_pos)
+            open_path = is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall)
             prev_distance = calculate_euclidean_distance(hit_point[-1][0], hit_point[-1][1], goal_pos[0], goal_pos[1])
             curr_distance = calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])
+            print("Previous distance: ", prev_distance)
+            print("Current Distance: ", curr_distance)
             print("WF State: ", wf_state)
             print("WF Prev: ", wf_prev)
-            if front_wall: 
+
+            if front_wall: #obstacle in front
                 print("Running front wall")
                 update_motor_speed(input_omega=[-1*robot_speed, robot_speed])
                 wf_prev = wf_state
                 wf_state = 'front'
-            elif (is_on_M_line(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1], m_line)) and is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and prev == 'wall_following':
+            
+            elif (is_on_M_line(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1], m_line)) and is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and prev == 'wall_following': # determine to leave wall following
                 print("On m-line!")
                 if curr_distance < prev_distance:
                     leave_point.append([gps_values[0], gps_values[1]])
@@ -212,32 +114,37 @@ if __name__ == "__main__":
                     state = 'align_robot_heading'
                     wf_state = ""
                     ewf_prev = ""
-            elif right_wall:
-                if is_open(imu_yaw, angle_to_goal, right_wall, left_wall, front_wall) and (curr_distance < prev_distance):
+            
+            elif right_wall: # moves forward while wall detected
+                print("Running Right Wall") 
+                update_motor_speed(input_omega=[robot_speed, robot_speed])
+                if open_path and (curr_distance < prev_distance) and not (wf_prev == 'front' or wf_prev == 'else'):
                     print("Direction to goal is open")
                     leave_point.append([gps_values[0], gps_values[1]])
                     prev = state
                     state = 'align_robot_heading'
                     wf_prev = ""
                     wf_state = ""
-                print("Running Right Wall") 
-                update_motor_speed(input_omega=[robot_speed, robot_speed])
                 wf_prev = wf_state
-                wf_state = 'right_wall'
-            elif (wf_state == 'right_wall' and right_wall==False) or (wf_state == 'right_turn' and right_wall==False):
+                wf_state = 'right_wall' 
+                
+            
+            else: # (wf_state == 'right_wall' and right_wall==False) or (wf_state == 'else' and right_wall==False): # turn around corners
                 print("Running right turn")
-                update_motor_speed(input_omega=[robot_speed, robot_speed/20])
+                update_motor_speed(input_omega=[robot_speed, robot_speed/corner_turn_speed])
                 prev = state
                 wf_prev = wf_state
-                wf_state = 'right_turn'
-        elif state == 'end':
+                wf_state = 'else'
+        
+        elif state == 'end': # end state
             print("Running end state")
-            update_motor_speed(input_omega=[0, 0, 0])
+            update_motor_speed(input_omega=[0, 0, 0]) # stop
             endtime = robot.getTime()
             elapsedtime = endtime - starttime
             print(f"Time taken to reach goal: {elapsedtime:.2f} seconds")
             break
-        elif(calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])< 0.1):
+        
+        elif(calculate_euclidean_distance(gps_values[0], gps_values[1], goal_pos[0], goal_pos[1])< 0.1): # fallback end state
             state = 'end'
             break
     pass

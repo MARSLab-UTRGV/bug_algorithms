@@ -29,4 +29,52 @@ Maze map now available; needed to add shape w/ transform w/ cadshape to the .obj
 Wednesday 8:32 AM
 Maze map failing physics. Current Readjustment.....
 
+UPDATES MOVED TO OVERLEAF
+
+Now converting to a log of completed tasks
+6/23/25 Monday 1PM-10PM
+Successful merge of Andres branch and Izabella Branch
+Run times recorded for Easy Maps
+Seems to be issue with some of the m-line algorithms not detecting m-line, need to debug
+Medium Maps ran, lots of issues with maps. Narrow spaces, hard to move easily for robot. 
+Overleaf updated to have description of maps
+All code updated:
+Initialization files are all the same. Number of comments reduced. Moved all functions used in the algorithm files to exist in the initialization files.
+Algorithm files had comment reduction. Edited all code to ensure debugging print statements are commented out unless needed and descriptions of code is shorter.
+Algorithms ran again on Easy Map 1. Error on the AltComboBug.
+Fixed Error on AltComboBug. Needed to tighten the turns. Corner_turn_speed updated to 12 on all algorithms.
+Rerun of all algorithms with same turn style.
+All algorithms had addition of path tracing added to them with the dots edited to be less compacted.
+Turns on all algorithms in the else statement to detect corners is causing issue occasionally. Noted in EasyMap1 recordings. This if from the is_open picking up the open path in front of robot and thinking it is open when the side of the robot is still detecting a wall in that space. need to debug and edit for all code
+
+attempted to add this in the is_open function:
+if left == True:
+            print("front left")
+            if (atg >= yaw and atg <= front_angle[1]):
+                print(atg, " >= ", yaw, " and ", atg, " <= ", front_angle[1])
+                return True      
+            if (yaw > front_angle[1]) and (atg >= (yaw-360) and atg <= front_angle[1]):
+                print(yaw, " > ", front_angle[1], " and ", atg, " >= ", yaw, " - 360 and ", atg, " <= ", front_angle[1])
+                return True
+            else: return False
+        elif right == True:
+            print("front right")
+            if (atg >= front_angle[0] and atg <= yaw):
+                print(atg, " >= ", front_angle[0], " and ", atg, " <= ", yaw)
+                return True      
+            if (front_angle[0] > yaw) and (atg >= (front_angle[0]-360) and atg <= yaw):
+                print(front_angle[0], " > ", yaw, " and ", atg, " >= ", front_angle[0], " - 360 and ", atg, " <= ", yaw)
+                return True
+            else:return False
+did not work. angle was in the space that was trying to prove false.
+instead using a wf_state and wf_prev variable helped MASSIVELY. should add to all that use is_open function.
+
+Easy Map 1 redone with all algorithms with same variables (turn speed and threshold widths)
+Videos recorded of EasyMap1 with all algorithms
+
+6/24/25 Tuesday 12PM-3PM
+corner turn speed changed to 15
+corner turn speed changed back to 12
+Rev2 needed wf_state and wf_prev added to help round corners correctly. 
+ComboBug had wf_state and wf_prev but needed adjustments since it would incorrectly read in some places and miss corners. 
 
